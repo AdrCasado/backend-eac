@@ -16,6 +16,8 @@ return new class extends Migration
             $table->foreignId('resultado_aprendizaje_id')->constrained('resultados_aprendizaje')->cascadeOnDelete();
             $table->string('codigo', 5);
             $table->text('descripcion');
+            // $table->decimal('peso_porcentaje')->unsigned()->nullable();
+            // $table->integer('orden')->unsigned()->nullable();
             $table->timestamps();
 
             $table->unique(['resultado_aprendizaje_id', 'codigo']);

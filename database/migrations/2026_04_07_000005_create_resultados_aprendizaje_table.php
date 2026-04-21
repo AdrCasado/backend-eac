@@ -16,8 +16,8 @@ return new class extends Migration
             $table->foreignId('modulo_id')->constrained('modulos')->cascadeOnDelete();
             $table->string('codigo', 5);
             $table->text('descripcion');
-            $table->float('peso_procentaje')->min(0)->max(100);
-            $table->integer('orden')->min(1);
+            // $table->float('peso_procentaje')->min(0)->max(100)->nullable();
+            // $table->integer('orden')->min(1)->nullable();
             $table->timestamps();
 
             $table->unique(['modulo_id', 'codigo']);
