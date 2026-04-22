@@ -2,6 +2,8 @@
 
 namespace Database\Seeders;
 
+use App\Models\Modulo;
+use App\Models\ResultadoAprendizaje;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
@@ -35,10 +37,12 @@ class CriteriosEvaluacionSeeder extends Seeder
 
             $rec = array_combine($header, $row);
 
+            $moduloId = Modulo::where('codigo', trim($rec['cod_modulo'] ?? ''))->first()->id ?? null;
+
             $data[] = [
-                'nombre' => trim($rec['nombre'] ?? ''),
-                'codigo' => trim($rec['codigo'] ?? ''),
-                'descripcion' => $rec['descripcion'] ?? null,
+                'resultado_aprendizaje_id' => ResultadoAprendizaje::where(['modulo_id' => $moduloId, 'codigo' => "RA" . trim($rec['id_ra'] ?? '')])->first()->id ?? null,
+                'codigo' => trim($rec['id_criterio'] ?? ''),
+                'descripcion' => $rec['definicion'] ?? null,
                 'created_at' => now(),
                 'updated_at' => now(),
             ];
@@ -47,10 +51,10 @@ class CriteriosEvaluacionSeeder extends Seeder
         // Insertar/actualizar usando upsert para evitar duplicados por 'codigo'
         DB::transaction(function () use ($data) {
             foreach (array_chunk($data, 200) as $chunk) {
-                DB::table('familias_profesionales')->upsert(
+                DB::table('criterios_evaluacion')->upsert(
                     $chunk,
-                    ['codigo'], // llave única para evitar duplicados
-                    ['nombre', 'descripcion', 'updated_at']
+                    ['resultado_aprendizaje_id', 'codigo'], // llave única para evitar duplicados
+                    ['descripcion', 'updated_at']
                 );
             }
         });

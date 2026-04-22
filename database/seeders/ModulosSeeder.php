@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\CicloFormativo;
+use App\Models\Modulo;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
@@ -78,9 +79,9 @@ class ModulosSeeder extends Seeder
 
             $rec = array_combine($header, $row);
 
-            $ciclo_data = CicloFormativo::where('codigo', trim($rec['cod_ciclo'] ?? ''))->first()->id;
+            $ciclo_data = CicloFormativo::where('codigo', trim($rec['cod_ciclo'] ?? ''))->first();
 
-            DB::table('modulos')->where('codigo', trim($rec['cod_modulo'] ?? ''))->update([
+            Modulo::where('codigo', trim($rec['cod_modulo'] ?? ''))->update([
                 'ciclo_formativo_id' => $ciclo_data->id
             ]);
         }

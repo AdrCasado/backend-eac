@@ -4,7 +4,9 @@ namespace Database\Seeders;
 
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Schema;
 
 class DatabaseSeeder extends Seeder
 {
@@ -22,6 +24,9 @@ class DatabaseSeeder extends Seeder
         //     'email' => 'test@example.com',
         // ]);
 
+        Model::unguard();
+        Schema::disableForeignKeyConstraints();
+
         $this->call([
             FamiliasProfesionalesSeeder::class,
             CiclosFormativosSeeder::class,
@@ -29,5 +34,8 @@ class DatabaseSeeder extends Seeder
             ResultadosAprendizajeSeeder::class,
             CriteriosEvaluacionSeeder::class,
         ]);
+
+        Model::reguard();
+        Schema::enableForeignKeyConstraints();
     }
 }

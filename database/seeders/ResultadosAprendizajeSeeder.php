@@ -48,7 +48,7 @@ class ResultadosAprendizajeSeeder extends Seeder
         // Insertar/actualizar usando upsert para evitar duplicados por 'codigo'
         DB::transaction(function () use ($data) {
             foreach (array_chunk($data, 200) as $chunk) {
-                DB::table('ciclos_formativos')->upsert(
+                DB::table('resultados_aprendizaje')->upsert(
                     $chunk,
                     ['modulo_id', 'codigo'], // llave única para evitar duplicados
                     ['descripcion', 'updated_at']
