@@ -26,40 +26,27 @@ class PerfilHabilitacion extends Model
         return $this->belongsTo(EcosistemaLaboral::class);
     }
 
-    public function prerequisitos(): BelongsToMany
+    // SCs conquistadas por este estudiante en este ecosistema
+    public function situacionesConquistadas(): BelongsToMany
     {
         return $this->belongsToMany(
             SituacionCompetencia::class,
-            'sc_precedencia',
-            'sc_id',
-            'sc_requisito_id'
-        );
+            'perfil_situacion',
+            'perfil_habilitacion_id',
+            'situacion_competencia_id'
+        )->withPivot([
+            'gradiente_autonomia',
+            'puntuacion_conquista',
+            'intentos',
+            'fecha_conquista',
+        ]);
     }
 
-    // SCs que requieren esta SC como prerequisito
-    public function dependientes(): BelongsToMany
+    // Códigos de SCs conquistadas (útil para el motor ZDP)
+    public function codigosConquistados(): array
     {
-        return $this->belongsToMany(
-            SituacionCompetencia::class,
-            'sc_precedencia',
-            'sc_requisito_id',
-            'sc_id'
-        );
-    }
-
-    // CEs del currículo que cubre esta SC
-    public function criteriosEvaluacion(): BelongsToMany
-    {
-        return $this->belongsToMany(
-            CriterioEvaluacion::class,
-            'sc_criterios_evaluacion',
-            'situacion_competencia_id',
-            'criterio_evaluacion_id'
-        )->withPivot('peso_en_sc');
-    }
-
-    public function perfilesHabilitacion(): HasMany
-    {
-        return $this->hasMany(PerfilSituacion::class, 'situacion_competencia_id');
+        return $this->situacionesConquistadas()
+                    ->pluck('codigo')
+                    ->toArray();
     }
 }
